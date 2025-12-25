@@ -5,6 +5,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto'
 import { User } from '../../common/decorators/user.decorator'
 import { AuthToken } from '../../common/decorators/auth-token.decorator'
 import { RefreshGuard } from './guards/refresh.guard'
+import { JwtAuthGuard } from './guards/jwt-auth.guard'
 
 @Controller('auth')
 export class AuthController {
@@ -24,5 +25,12 @@ export class AuthController {
 	@Post('refresh')
 	refresh(@User('sub') userId: number, @AuthToken() refreshToken: string) {
 		return this.authService.refresh(userId, refreshToken)
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Post('logout')
+	async logout(@User('id') userId: number) {
+		await this.authService.logout(userId)
+		return { success: true }
 	}
 }

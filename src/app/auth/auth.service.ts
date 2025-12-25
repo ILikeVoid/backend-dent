@@ -16,7 +16,11 @@ export class AuthService {
 	) {}
 
 	private async issueTokens(user: UserEntity) {
-		const payload = { sub: user.id, email: user.email }
+		const payload = {
+			sub: user.id,
+			email: user.email,
+			companyId: user.company?.id ?? null
+		}
 
 		const accessToken = this.jwtService.sign(payload, {
 			secret: this.config.get('JWT_ACCESS_SECRET'),
@@ -73,5 +77,9 @@ export class AuthService {
 		if (!valid) throw new UnauthorizedException()
 
 		return this.issueTokens(user)
+	}
+
+	async logout(userId: number) {
+		await this.usersService.updateRefreshToken(userId, null)
 	}
 }

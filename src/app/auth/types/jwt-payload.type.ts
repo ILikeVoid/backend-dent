@@ -1,4 +1,5 @@
 export interface JwtPayload {
 	sub: number
-	email?: string
+	email: string
+	companyId?: number | null
 }

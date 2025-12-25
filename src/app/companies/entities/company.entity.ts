@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { IsOptional } from 'class-validator'
 
 @Entity('company')
 export class CompanyEntity {
@@ -14,6 +15,7 @@ export class CompanyEntity {
 	@Column()
 	bin: string
 
+	@IsOptional()
 	@Column({ nullable: true })
-	phone: string
+	phone?: string
 }
