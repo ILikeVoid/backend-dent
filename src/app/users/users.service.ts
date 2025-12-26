@@ -23,6 +23,10 @@ export class UsersService {
 		return await this.userRepo.save(dto)
 	}
 
+	async update(user: UserEntity) {
+		return await this.userRepo.save(user)
+	}
+
 	async updateRefreshToken(userId: number, refreshToken: string | null) {
 		const result = await this.userRepo.update(userId, { refreshToken })
 

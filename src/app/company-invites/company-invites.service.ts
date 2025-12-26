@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CompanyInviteEntity } from './entities/company-invite.entity'
 import { Repository } from 'typeorm'
@@ -51,8 +51,12 @@ export class CompanyInvitesService {
 
 		const user = await this.usersService.findById(userId)
 
+		if (!user) {
+			throw new NotFoundException('Пользователь не найден')
+		}
+
 		user.company = invite.company
-		await this.usersService.save(user)
+		await this.usersService.update(user)
 
 		invite.status = InviteStatus.ACCEPTED
 		await this.inviteRepo.save(invite)
@@ -60,7 +64,7 @@ export class CompanyInvitesService {
 		return { success: true }
 	}
 
-	async reject(inviteId: number, userId: number) {
+	async reject(inviteId: number) {
 		const invite = await this.inviteRepo.findOne({
 			where: { id: inviteId }
 		})

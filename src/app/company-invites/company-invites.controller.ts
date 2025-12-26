@@ -18,7 +18,7 @@ export class CompanyInvitesController {
 	}
 
 	@Post(':id/reject')
-	reject(@Param('id', ParseIntPipe) inviteId: number, @User('id') userId: number) {
-		return this.invitesService.reject(inviteId, userId)
+	reject(@Param('id', ParseIntPipe) inviteId: number) {
+		return this.invitesService.reject(inviteId)
 	}
 }
